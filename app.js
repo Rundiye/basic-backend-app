@@ -1,20 +1,20 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const path = require('path');
-const logger = require('morgan');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
-const cors = require('cors');
-require('dotenv').config();
+const express = require('express')
+const path = require('path')
+const logger = require('morgan')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
+const session = require('express-session')
+const MongoStore = require('connect-mongo')(session)
+const cors = require('cors')
+require('dotenv').config()
 
-const auth = require('./routes/auth');
-const index = require('./routes/index');
-const trip = require('./routes/trip');
-const users = require('./routes/users');
+const auth = require('./routes/auth')
+const index = require('./routes/index')
+const trip = require('./routes/trip')
+const users = require('./routes/users')
 
 mongoose
   .connect(process.env.MONGODB_URI, {
@@ -23,20 +23,20 @@ mongoose
     reconnectTries: Number.MAX_VALUE
   })
   .then(() => {
-    console.log(`Connected to database`);
+    console.log(`Connected to database`)
   })
   .catch(error => {
-    console.error(error);
-  });
+    console.error(error)
+  })
 
-const app = express();
+const app = express()
 
 app.use(
   cors({
     credentials: true,
     origin: [process.env.PUBLIC_DOMAIN]
   })
-);
+)
 
 app.use(
   session({
@@ -51,33 +51,33 @@ app.use(
       maxAge: 24 * 60 * 60 * 1000
     }
   })
-);
+)
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/auth', auth);
-app.use('/index', index);
-app.use('/trip', trip);
-app.use('/users', users);
+app.use('/auth', auth)
+app.use('/index', index)
+app.use('/trip', trip)
+app.use('/users', users)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
-  res.status(404).json({ code: 'not found' });
-});
+  res.status(404).json({ code: 'not found' })
+})
 
 app.use((err, req, res, next) => {
   // always log the error
-  console.error('ERROR', req.method, req.path, err);
+  console.error('ERROR', req.method, req.path, err)
 
   // only render if the error ocurred before sending the response
   if (!res.headersSent) {
-    const statusError = err.status || '500';
-    res.status(statusError).json(err);
+    const statusError = err.status || '500'
+    res.status(statusError).json(err)
   }
-});
+})
 
-module.exports = app;
+module.exports = app
