@@ -1,29 +1,29 @@
-'use strict';
+'use strict'
 
-const createError = require('http-errors');
+const createError = require('http-errors')
 
 exports.isLoggedIn = () => (req, res, next) => {
   if (req.session.currentUser) {
-    next();
+    next()
   } else {
-    next(createError(401));
+    next(createError(401))
   }
-};
+}
 
 exports.isNotLoggedIn = () => (req, res, next) => {
   if (!req.session.currentUser) {
-    next();
+    next()
   } else {
-    next(createError(403));
+    next(createError(403))
   }
-};
+}
 
 exports.validationLoggin = () => (req, res, next) => {
-  const { username, password } = req.body;
+  const { username, password } = req.body
 
   if (!username || !password) {
-    next(createError(422));
+    next(createError(422))
   } else {
-    next();
+    next()
   }
-};
+}

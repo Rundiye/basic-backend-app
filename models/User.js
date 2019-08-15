@@ -14,6 +14,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  email: String,
   mytrips: [{
     type: ObjectId,
     ref: 'Trip'

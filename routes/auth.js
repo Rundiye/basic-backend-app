@@ -56,6 +56,7 @@ router.post(
         const hashPass = bcrypt.hashSync(password, salt)
         const newUser = await User.create({ username, password: hashPass, email })
         req.session.currentUser = newUser
+        console.log(req.session.currentUser)
         res.status(200).json(newUser)
       }
     } catch (error) {
@@ -65,7 +66,7 @@ router.post(
 )
 
 router.post('/logout', isLoggedIn(), (req, res, next) => {
-  req.session.destroy()
+  delete req.session.currentUser
   return res.status(204).send()
 })
 
