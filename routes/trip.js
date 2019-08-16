@@ -16,15 +16,17 @@ router.get('/trips', async (req, res, next) => {
   }
 })
 
-// router.get('/trips/:id', async (req, res, next) => {
-//   // TO DO fix ID
-//   try {
-//     const singleTrip = await Trip.findOne(id)
-//     res.status(200).json({ singleTrip })
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+router.get('/mytrips', async (req, res, next) => {
+  // TO DO fix ID
+  const userId = req.session.currentUser._id
+  try {
+    const listOfMyTrips = await Trip.find({ owner: userId })
+    res.status(200).json({ listOfMyTrips })
+    console.log(listOfMyTrips)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.post('/trips/new', async (req, res, next) => {
   const { title, destination, startDate, endDate, description, budget, totalDays } = req.body
@@ -38,13 +40,15 @@ router.post('/trips/new', async (req, res, next) => {
 
   if (newEndDate.getTime() >= newStartDate.getTime()) {
     try {
+      const owner = req.session.currentUser._id
       const trip = await Trip.create({
         title,
         destination,
         startDate,
         endDate,
         description,
-        budget
+        budget,
+        owner
       })
       Promise.all(totalDaysArray.map(async (totalDay, index) => {
         const day = new Date(startDate)

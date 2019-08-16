@@ -36,7 +36,8 @@ const tripSchema = new Schema({
   participants: [{
     type: ObjectId,
     ref: 'User'
-  }]
+  }],
+  owner: String
 },
 {
   timestamps: true
