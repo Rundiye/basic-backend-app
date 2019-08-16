@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-const ObjectId = Schema.Types.ObjectId;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const ObjectId = Schema.Types.ObjectId
 
 const tripSchema = new Schema({
   title: {
@@ -29,23 +29,19 @@ const tripSchema = new Schema({
     min: 0,
     required: true
   },
-  activities: [{
+  totalDays: [{
     type: ObjectId,
-    ref: 'Activity'
+    ref: 'Day'
   }],
   participants: [{
     type: ObjectId,
     ref: 'User'
-  }],
-  owner: {
-    type: ObjectId,
-    ref: 'User'
-  }
+  }]
 },
 {
   timestamps: true
-});
+})
 
-const Trip = mongoose.model('Trip', tripSchema);
+const Trip = mongoose.model('Trip', tripSchema)
 
-module.exports = Trip;
+module.exports = Trip

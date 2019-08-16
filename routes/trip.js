@@ -1,59 +1,97 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const Trip = require('../models/Trip.js');
-const router = express.Router();
+const express = require('express')
+const Trip = require('../models/Trip.js')
+const User = require('../models/User')
+const Day = require('../models/Day')
+const router = express.Router()
 
 /* GET home page. */
 router.get('/trips', async (req, res, next) => {
   try {
-    const listOfTrips = await Trip.find();
-    res.status(200).json({ listOfTrips });
+    const listOfTrips = await Trip.find()
+    res.status(200).json({ listOfTrips })
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
-router.get('/trips/:id', async (req, res, next) => {
-  try {
-    const singleTrip = await Trip.findOne(id);
-    res.status(200).json({ singleTrip });
-  } catch (error) {
-    next(error);
-  }
-});
+// router.get('/trips/:id', async (req, res, next) => {
+//   // TO DO fix ID
+//   try {
+//     const singleTrip = await Trip.findOne(id)
+//     res.status(200).json({ singleTrip })
+//   } catch (error) {
+//     next(error)
+//   }
+// })
 
 router.post('/trips/new', async (req, res, next) => {
-  const newTrip = req.body;
-  try {
-    const createdTrip = await Trip.create(newTrip);
-    res.status(200).json(createdTrip);
-  } catch (error) {
-    next(error);
+  const { title, destination, startDate, endDate, description, budget, totalDays } = req.body
+  const newEndDate = new Date(endDate)
+  const newStartDate = new Date(startDate)
+  console.log(totalDays)
+  const totalDaysArray = []
+  for (let i = 0; i < totalDays; i++) {
+    totalDaysArray.push(i)
   }
-});
+
+  if (newEndDate.getTime() >= newStartDate.getTime()) {
+    try {
+      const trip = await Trip.create({
+        title,
+        destination,
+        startDate,
+        endDate,
+        description,
+        budget
+      })
+      Promise.all(totalDaysArray.map(async (totalDay, index) => {
+        const day = new Date(startDate)
+        day.setDate(day.getDate() + index)
+
+        const createdDay = await Day.create({
+          day: day,
+          activities: [],
+          trip: trip._id
+        })
+        await Trip.findByIdAndUpdate(trip._id, { $push: { totalDays: createdDay._id } })
+      })).then(async () => {
+        const tripId = trip._id
+        const userId = req.session.currentUser._id
+        await User.findByIdAndUpdate(userId, { $push: { mytrips: tripId } })
+
+        res.status(200).json(trip)
+      })
+    } catch (error) {
+      next(error)
+    }
+  } else {
+    res.status(240).json({ error: 'Invalid date' })
+  }
+})
 
 router.put('/trips/:id/update', async (req, res, next) => {
-  const { id } = req.params;
-  const tripUpdated = req.body;
+  const { id } = req.params
+  const tripUpdated = req.body
 
   try {
-    const updated = await Trip.findByIdAndUpdate(id, tripUpdated, { new: true });
-    res.status(200).json(updated);
+    const updated = await Trip.findByIdAndUpdate(id, tripUpdated, { new: true })
+    res.status(200).json(updated)
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
 router.delete('/trips/:id/delete', async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.params
 
   try {
-    await Trip.findByIdAndDelete(id);
-    res.status(200).json({ message: 'app deleted' });
+    await Trip.findByIdAndDelete(id)
+    res.status(200).json({ message: 'app deleted' })
   } catch (error) {
-    next(error);
+    next(error)
   }
-});
+})
 
-module.exports = router;
+module.exports = router
