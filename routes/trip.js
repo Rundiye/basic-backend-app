@@ -32,7 +32,6 @@ router.post('/trips/new', async (req, res, next) => {
   const { title, destination, startDate, endDate, description, budget, totalDays } = req.body
   const newEndDate = new Date(endDate)
   const newStartDate = new Date(startDate)
-  console.log(totalDays)
   const totalDaysArray = []
   for (let i = 0; i < totalDays; i++) {
     totalDaysArray.push(i)
