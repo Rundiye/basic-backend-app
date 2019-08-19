@@ -33,7 +33,7 @@ router.post('/trips/new', async (req, res, next) => {
   const newEndDate = new Date(endDate)
   const newStartDate = new Date(startDate)
   const totalDaysArray = []
-  for (let i = 0; i < totalDays; i++) {
+  for (let i = 0; i <= totalDays; i++) {
     totalDaysArray.push(i)
   }
 
@@ -54,7 +54,7 @@ router.post('/trips/new', async (req, res, next) => {
         day.setDate(day.getDate() + index)
 
         const createdDay = await Day.create({
-          day: day,
+          date: day,
           activities: [],
           trip: trip._id
         })
@@ -79,7 +79,8 @@ router.get('/trips/:id/', async (req, res, next) => {
   // const singleTrip = req.body
 
   try {
-    const singleTrip = await Trip.findById(id)
+    const singleTrip = await Trip.findById(id).populate('totalDays')
+    console.log(singleTrip)
     res.status(200).json(singleTrip)
   } catch (error) {
     next(error)

@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require('express')
-const Activity = require('../models/Activity.js')
+const Activity = require('../models/Activity')
 const Day = require('../models/Day')
 const router = express.Router()
 
@@ -27,9 +27,9 @@ router.get('/myactivities', async (req, res, next) => {
   }
 })
 
-router.post('/activities/new', async (req, res, next) => {
+router.post('/activities/new/:dayId', async (req, res, next) => {
   const { title, address, price, description, activityType } = req.body
-
+  const { dayId } = req.params
   try {
     const newActivity = await Activity.create({
       title,
@@ -38,11 +38,13 @@ router.post('/activities/new', async (req, res, next) => {
       description,
       activityType
     })
-    const dayId = day._id
-    const activityId = activity._id
-    await Day.findByIdAndUpdate(dayId, { $push: { activities: activityId } })
 
-    res.status(200).json(newActivity)
+    const { _id } = newActivity
+    const pushActivity = await Day.findByIdAndUpdate(dayId, { $push: { activities: _id } })
+
+    console.log(pushActivity)
+
+    res.status(200).json(pushActivity)
   } catch (error) {
     next(error)
   }
