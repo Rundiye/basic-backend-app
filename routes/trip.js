@@ -18,7 +18,6 @@ router.get('/trips', async (req, res, next) => {
 })
 
 router.get('/mytrips', async (req, res, next) => {
-  // TO DO fix ID
   const userId = req.session.currentUser._id
   try {
     const listOfMyTrips = await Trip.find({ owner: userId })

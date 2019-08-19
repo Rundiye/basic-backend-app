@@ -16,12 +16,11 @@ const router = express.Router()
 //   }
 // })
 
-router.get('/myactivities', async (req, res, next) => {
-  // TO DO fix ID
-  const dayId = req.params
+router.get('/activities', async (req, res, next) => {
+  const { dayId } = req.params
   try {
-    const listOfMyActivities = await Day.find(dayId)
-    res.status(200).json({ listOfMyActivities })
+    const activities = await Day.find(dayId).populate('activities')
+    res.status(200).json(activities)
   } catch (error) {
     next(error)
   }
