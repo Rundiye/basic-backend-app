@@ -5,9 +5,10 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.Types.ObjectId
 
 const daySchema = new Schema({
-  day: {
+  date: {
     type: String
   },
+  expenses: Number,
   activities: [{
     type: ObjectId,
     ref: 'Activity'

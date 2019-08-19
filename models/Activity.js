@@ -9,10 +9,6 @@ const activitySchema = new Schema({
     type: String,
     required: true
   },
-  destination: {
-    type: String,
-    required: true
-  },
   address: {
     type: String,
     required: true
@@ -22,9 +18,6 @@ const activitySchema = new Schema({
     required: true
   },
   description: {
-    type: String
-  },
-  image: {
     type: String
   },
   activityType: {
