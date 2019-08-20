@@ -3,6 +3,7 @@
 const express = require('express')
 const Activity = require('../models/Activity')
 const Day = require('../models/Day')
+const Trip = require('../models/Trip')
 const router = express.Router()
 
 /* GET home page. */
@@ -39,11 +40,21 @@ router.post('/activities/new/:dayId', async (req, res, next) => {
     })
 
     const { _id } = newActivity
-    const pushActivity = await Day.findByIdAndUpdate(dayId, { $push: { activities: _id } })
+    const updatedDay = await Day.findByIdAndUpdate(dayId, { $push: { activities: _id } }, { new: true })
+    console.log('updatedDay.trip[0]', updatedDay.trip[0])
 
-    console.log(pushActivity)
+    const updatedTrip = await Trip.findById(updatedDay.trip[0])
+      .populate('totalDays')
+      .populate({
+        path: 'totalDays',
+        populate: {
+          path: 'activities'
+        }
+      })
 
-    res.status(200).json(pushActivity)
+    console.log('updatedTrip', updatedTrip)
+
+    res.status(200).json(updatedTrip)
   } catch (error) {
     next(error)
   }
