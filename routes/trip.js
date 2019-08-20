@@ -78,7 +78,14 @@ router.get('/trips/:id/', async (req, res, next) => {
   // const singleTrip = req.body
 
   try {
-    const singleTrip = await Trip.findById(id).populate('totalDays')
+    const singleTrip = await Trip.findById(id)
+      .populate('totalDays')
+      .populate({
+        path: 'totalDays',
+        populate: {
+          path: 'activities'
+        }
+      })
     console.log(singleTrip)
     res.status(200).json(singleTrip)
   } catch (error) {
