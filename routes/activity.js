@@ -60,17 +60,16 @@ router.post('/activities/new/:dayId', async (req, res, next) => {
   }
 })
 
-// router.get('/trips/:id/', async (req, res, next) => {
-//   const { id } = req.params
-//   // const singleTrip = req.body
+router.get('/activities/:id/', async (req, res, next) => {
+  const { id } = req.params
 
-//   try {
-//     const singleTrip = await Trip.findById(id)
-//     res.status(200).json(singleTrip)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+  try {
+    const activity = await Activity.findById(id)
+    res.status(200).json(activity)
+  } catch (error) {
+    next(error)
+  }
+})
 
 router.put('/activities/:id/update', async (req, res, next) => {
   const { id } = req.params

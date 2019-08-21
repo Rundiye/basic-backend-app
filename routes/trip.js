@@ -86,6 +86,7 @@ router.get('/trips/:id/', async (req, res, next) => {
           path: 'activities'
         }
       })
+    console.log(singleTrip)
     res.status(200).json(singleTrip)
   } catch (error) {
     next(error)

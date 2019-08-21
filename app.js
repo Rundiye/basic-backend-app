@@ -60,6 +60,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use(function (req, res, next) {
+  res.set('Cache-Control', 'no-cache')
+  next()
+})
 app.use('/auth', auth)
 app.use('/index', index)
 app.use('/trip', trip)
