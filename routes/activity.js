@@ -72,39 +72,27 @@ router.post('/activities/new/:dayId', async (req, res, next) => {
 //   }
 // })
 
-// router.put('/trips/:id/update', async (req, res, next) => {
-//   const { id } = req.params
-//   const tripUpdated = req.body
+router.put('/activities/:id/update', async (req, res, next) => {
+  const { id } = req.params
+  const activityUpdated = req.body
 
-//   try {
-//     const updated = await Trip.findByIdAndUpdate(id, tripUpdated, { new: true })
-//     res.status(200).json(updated)
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+  try {
+    const updated = await Activity.findByIdAndUpdate(id, activityUpdated, { new: true })
+    res.status(200).json(updated)
+  } catch (error) {
+    next(error)
+  }
+})
 
-// router.delete('/trips/:id/delete', async (req, res, next) => {
-//   const { id } = req.params
+router.delete('/activities/:id/delete', async (req, res, next) => {
+  const { id } = req.params
 
-//   try {
-//     await Trip.findByIdAndDelete(id)
-//     res.status(200).json({ message: 'app deleted' })
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
-// router.get('mytrips/:id/dashboard', async (req, res, next) => {
-//   const { id } = req.params
-
-//   try {
-//     await Trip.findById(id)
-//     res.redirect('trips/:id/dashboard')
-//     res.status(200).json()
-//   } catch (error) {
-//     next(error)
-//   }
-// })
+  try {
+    await Activity.findByIdAndDelete(id)
+    res.status(200).json({ message: 'activity deleted' })
+  } catch (error) {
+    next(error)
+  }
+})
 
 module.exports = router
