@@ -86,7 +86,7 @@ router.get('/trips/:id/', async (req, res, next) => {
           path: 'activities'
         }
       })
-    console.log(singleTrip)
+    console.log('SINGLE TRIP ###################################################################3', singleTrip.totalDays[0].activities)
     res.status(200).json(singleTrip)
   } catch (error) {
     next(error)

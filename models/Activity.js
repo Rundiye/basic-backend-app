@@ -25,10 +25,10 @@ const activitySchema = new Schema({
     required: true,
     Enum: ['Flight', 'Accomodation', 'Food', 'Cultural', 'Nightlife', 'others']
   },
-  trip: [{
+  trip: {
     type: ObjectId,
     ref: 'Trip'
-  }]
+  }
 },
 {
   timestamps: true

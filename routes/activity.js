@@ -28,15 +28,17 @@ router.get('/activities', async (req, res, next) => {
 })
 
 router.post('/activities/new/:dayId', async (req, res, next) => {
-  const { title, address, price, description, activityType } = req.body
+  const { title, address, price, description, activityType, trip } = req.body
   const { dayId } = req.params
+
   try {
     const newActivity = await Activity.create({
       title,
       address,
       price,
       description,
-      activityType
+      activityType,
+      trip
     })
 
     const { _id } = newActivity
@@ -73,10 +75,14 @@ router.get('/activities/:id/', async (req, res, next) => {
 
 router.put('/activities/:id/update', async (req, res, next) => {
   const { id } = req.params
-  const activityUpdated = req.body
+  const { title, address, price, description, activityType, trip } = req.body
+  const activityUpdated = { title, address, price, description, activityType, trip }
 
   try {
     const updated = await Activity.findByIdAndUpdate(id, activityUpdated, { new: true })
+
+    console.log('HERE', updated)
+
     res.status(200).json(updated)
   } catch (error) {
     next(error)
