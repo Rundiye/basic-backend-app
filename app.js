@@ -76,10 +76,8 @@ app.use((req, res, next) => {
 })
 
 app.use((err, req, res, next) => {
-  // always log the error
   console.error('ERROR', req.method, req.path, err)
 
-  // only render if the error ocurred before sending the response
   if (!res.headersSent) {
     const statusError = err.status || '500'
     res.status(statusError).json(err)

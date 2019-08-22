@@ -6,11 +6,9 @@ const User = require('../models/User')
 const Day = require('../models/Day')
 const router = express.Router()
 
-/* GET home page. */
 router.get('/trips', async (req, res, next) => {
   try {
     const listOfTrips = await Trip.find()
-
     res.status(200).json({ listOfTrips })
   } catch (error) {
     next(error)
@@ -19,6 +17,7 @@ router.get('/trips', async (req, res, next) => {
 
 router.get('/mytrips', async (req, res, next) => {
   const userId = req.session.currentUser._id
+
   try {
     const listOfMyTrips = await Trip.find({ owner: userId })
     res.status(200).json({ listOfMyTrips })
@@ -32,6 +31,7 @@ router.post('/trips/new', async (req, res, next) => {
   const newEndDate = new Date(endDate)
   const newStartDate = new Date(startDate)
   const totalDaysArray = []
+
   for (let i = 0; i <= totalDays; i++) {
     totalDaysArray.push(i)
   }
@@ -75,7 +75,6 @@ router.post('/trips/new', async (req, res, next) => {
 
 router.get('/trips/:id/', async (req, res, next) => {
   const { id } = req.params
-  // const singleTrip = req.body
 
   try {
     const singleTrip = await Trip.findById(id)
@@ -86,7 +85,6 @@ router.get('/trips/:id/', async (req, res, next) => {
           path: 'activities'
         }
       })
-    console.log('SINGLE TRIP ###################################################################3', singleTrip.totalDays[0].activities)
     res.status(200).json(singleTrip)
   } catch (error) {
     next(error)

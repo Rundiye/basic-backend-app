@@ -6,17 +6,6 @@ const Day = require('../models/Day')
 const Trip = require('../models/Trip')
 const router = express.Router()
 
-/* GET home page. */
-// router.get('/trips', async (req, res, next) => {
-//   try {
-//     const listOfTrips = await Trip.find()
-
-//     res.status(200).json({ listOfTrips })
-//   } catch (error) {
-//     next(error)
-//   }
-// })
-
 router.get('/activities', async (req, res, next) => {
   const { dayId } = req.params
   try {
@@ -43,7 +32,6 @@ router.post('/activities/new/:dayId', async (req, res, next) => {
 
     const { _id } = newActivity
     const updatedDay = await Day.findByIdAndUpdate(dayId, { $push: { activities: _id } }, { new: true })
-    console.log('updatedDay.trip[0]', updatedDay.trip[0])
 
     const updatedTrip = await Trip.findById(updatedDay.trip[0])
       .populate('totalDays')
@@ -53,8 +41,6 @@ router.post('/activities/new/:dayId', async (req, res, next) => {
           path: 'activities'
         }
       })
-
-    console.log('updatedTrip', updatedTrip)
 
     res.status(200).json(updatedTrip)
   } catch (error) {
@@ -80,9 +66,6 @@ router.put('/activities/:id/update', async (req, res, next) => {
 
   try {
     const updated = await Activity.findByIdAndUpdate(id, activityUpdated, { new: true })
-
-    console.log('HERE', updated)
-
     res.status(200).json(updated)
   } catch (error) {
     next(error)
