@@ -32,7 +32,6 @@ router.post('/activities/new/:dayId', async (req, res, next) => {
 
     const { _id } = newActivity
     const updatedDay = await Day.findByIdAndUpdate(dayId, { $push: { activities: _id } }, { new: true })
-
     const updatedTrip = await Trip.findById(updatedDay.trip[0])
       .populate('totalDays')
       .populate({
